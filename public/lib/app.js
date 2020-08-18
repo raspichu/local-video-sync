@@ -20,16 +20,26 @@ web browser that
 </video>
 `;
 
-    let changing_time = false;
+    let changing = {
+        time: false,
+        pause: false,
+        play: false
+    }
     socket.on('update', data => {
         console.log('data: ', data);
         if (player) {
             if (data.t || data.t === 0) {
-                changing_time = true;
+                changing.time = true;
                 player.currentTime(data.t);
             }
-            if (data.p) player.play();
-            if (data.s) player.pause();
+            if (data.p) {
+                changing.pause = true;
+                player.play();
+            }
+            if (data.s) {
+                changing.play = true;
+                player.pause();
+            }
         }
     });
 
@@ -55,18 +65,21 @@ web browser that
         });
 
         player.on("seeking", () => {
-            console.log("Updated");
-            if (changing_time) {
-                changing_time = false;
+            if (changing.time) {
+                changing.time = false;
                 return;
             }
-            console.log("Sending update")
+            console.log("Updated");
             socket.emit('update', {
                 t: player.currentTime()
             });
             // # Send seeking to all
         });
         player.on("pause", () => {
+            if (changing.pause) {
+                changing.pause = false;
+                return;
+            }
             console.log("Stopped");
             socket.emit('update', {
                 s: true,
@@ -75,6 +88,10 @@ web browser that
             // # Send pause to all
         });
         player.on("play", () => {
+            if (changing.play) {
+                changing.play = false;
+                return;
+            }
             console.log("Play");
             socket.emit('update', {
                 p: true,
