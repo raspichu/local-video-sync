@@ -41,6 +41,11 @@ web browser that
                 player.pause();
             }
         }
+        setTimeout(() => {
+            changing.time = false;
+            changing.pause = false;
+            changing.play = false;
+        }, 300);
     });
 
     $('#video_input').on('change', (e) => {
