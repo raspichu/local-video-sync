@@ -25,6 +25,7 @@ web browser that
         pause: false,
         play: false
     }
+    let timeout = null;
     socket.on('update', data => {
         console.log('data: ', data);
         if (player) {
@@ -41,7 +42,8 @@ web browser that
                 player.pause();
             }
         }
-        setTimeout(() => {
+        if (timeout) clearTimeout(timeout);
+        timeout = setTimeout(() => {
             changing.time = false;
             changing.pause = false;
             changing.play = false;
