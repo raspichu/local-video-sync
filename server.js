@@ -17,7 +17,9 @@ app.use(bodyParser.json());
 
 app.use(cors());
 
-let rooms = {};
+const port = process.env.PORT || 8080;
+
+
 const io = require('socket.io')(server);
 io.on('connection', socket => {
     console.log('Clinet connected');
@@ -39,7 +41,6 @@ io.on('connection', socket => {
 console.log("[ ----- Iniciando", moment().format('YYYY-MM-DD HH:mm:ss'), '----- ]');
 
 
-const PORT = 8080;
 
 server.listen(PORT, (err) => {
     if (err) {
