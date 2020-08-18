@@ -56,13 +56,12 @@ web browser that
 
         player.on("seeking", () => {
             console.log("Updated");
-            if (changing_time){
-                changing_time=false;
+            if (changing_time) {
+                changing_time = false;
                 return;
             }
+            console.log("Sending update")
             socket.emit('update', {
-                s: player.paused(),
-                p: !player.paused(),
                 t: player.currentTime()
             });
             // # Send seeking to all
