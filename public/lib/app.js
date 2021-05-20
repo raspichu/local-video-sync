@@ -5,7 +5,7 @@ $(document).ready(() => {
     console.log("Document ready");
 
     const URL = window.URL || window.webkitURL
-    const socket = io();
+    const socket = io.connect(window.location.host, { path: window.location.pathname+"socket.io" });
 
 
     let player = null;
@@ -24,7 +24,7 @@ web browser that
         time: false,
         pause: false,
         play: false
-    }
+    };
     let timeout = null;
     socket.on('update', data => {
         console.log('data: ', data);
